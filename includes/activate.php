@@ -1,11 +1,11 @@
 <?php
 
 /*
- * @package runabitfaster
+ * @package wp_club_records
  * 
 */
 
-class runabitfasterActivate {
+class WPClubRecordsActivate {
     public static function activate() {
         flush_rewrite_rules();
     }
