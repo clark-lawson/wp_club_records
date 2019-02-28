@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @package runabitfaster
+ * @package wp_club_records
  */
 
  /*
- Plugin Name: runabitfaster Plugin
+ Plugin Name: WP Club Records Plugin
  Plugin URI: http://runabitfaster.com
- Description: This is my first attempt on writing a custom plugin for wordpress.
+ Description: A Wordpress Plugin to manage athletic and running club records.
  Version: 1.0.0
  Author: Clark Lawson
  Author URI: http://runabitfaster.com
@@ -48,10 +48,10 @@ if ( ! function_exists( 'add_action')) {
 }
 
 # Check if the class exists, then initialise
-if ( !class_exists( 'runabitfaster' )) {
+if ( !class_exists( 'WPClubRecords' )) {
 
   # Create PHP Class
-  class runabitfaster {
+  class WPClubRecords {
 
     public $plugin;
 
@@ -98,20 +98,20 @@ if ( !class_exists( 'runabitfaster' )) {
 
     function activate() {
       require_once plugin_dir_path( __FILE__) . 'includes/activate.php';
-      runabitfasterActivate::activate();
+      WPClubRecordsActivate::activate();
     }
 
   }
 
   # Initialising the Class
-  $runabitfaster = new runabitfaster();
-  $runabitfaster->register(); # Trigger Register Method within this variable;
+  $WPClubRecords = new WPClubRecords();
+  $WPClubRecords->register(); # Trigger Register Method within this variable;
 
   # Activation: Run within this file, calling the function within the class
-  register_activation_hook( __FILE__, array( $runabitfaster, 'activate' ) );
+  register_activation_hook( __FILE__, array( $WPClubRecords, 'activate' ) );
 
   # Decativation
   require_once plugin_dir_path( __FILE__) . 'includes/deactivate.php';
-  register_activation_hook( __FILE__, array( 'runabitfasterDeactivate', 'deactivate' ) );
+  register_activation_hook( __FILE__, array( 'WPClubRecordsDeactivate', 'deactivate' ) );
 
 }
