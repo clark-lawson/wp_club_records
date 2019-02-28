@@ -47,71 +47,31 @@ if ( ! function_exists( 'add_action')) {
     die;
 }
 
-# Check if the class exists, then initialise
-if ( !class_exists( 'WPClubRecords' )) {
-
-  # Create PHP Class
-  class WPClubRecords {
-
-    public $plugin;
-
-    function __construct() {
-      $this->plugin = plugin_basename( __FILE__ );
-    }
-
-    function register () {
-
-      # Enqueue Scripts;
-      add_action( 'admin_enqueue_scripts', array ($this, 'enqueue')); # Replace wp/admin to make available in front/back
-
-      # Add Admin Menu Button;
-      add_action( 'admin_menu' , array ( $this, 'add_admin_pages'));
-
-      # Add Filter to Add Settings options on plugin;
-      add_filter ( "plugin_action_links_$this->plugin", array ( $this, 'settings_link') );
-
-    }
-
-    public function settings_link ($links) {
-      // add customer settings link
-      $settings_link = '<a href="admin.php?page=club_records">Settings</a>';
-      array_push ( $links, $settings_link );
-      return $links;
-    }
-
-    public function add_admin_pages() {
-      add_menu_page( 'Club Records', 'Records', 'manage_options', 'club_records', array ( $this, 'admin_index'), 'dashicons-star-empty', 110);
-    }
-
-    public function admin_index() {
-      require_once plugin_dir_path( __FILE__) . 'includes/templates/admin.php';
-    }
-
-    protected function custom_post_type() {
-      register_post_type('club_records', ['public' => true, 'label' => 'Records']);
-    }
-
-    function enqueue() {
-      wp_enqueue_style('club_records_style', plugins_url( '/assets/style.css', __FILE__) );
-      // use wp_enqueue_script() for .js files
-    }
-
-    function activate() {
-      require_once plugin_dir_path( __FILE__) . 'includes/activate.php';
-      WPClubRecordsActivate::activate();
-    }
-
-  }
-
-  # Initialising the Class
-  $WPClubRecords = new WPClubRecords();
-  $WPClubRecords->register(); # Trigger Register Method within this variable;
-
-  # Activation: Run within this file, calling the function within the class
-  register_activation_hook( __FILE__, array( $WPClubRecords, 'activate' ) );
-
-  # Decativation
-  require_once plugin_dir_path( __FILE__) . 'includes/deactivate.php';
-  register_activation_hook( __FILE__, array( 'WPClubRecordsDeactivate', 'deactivate' ) );
+/*
+ * The code that runs during plugin activation
+*/
+function activate_wp_club_records() {
+  require_once plugin_dir_path( __FILE__ )  . 'includes/base/activate.php';
+  activate::WPClubRecordsActivate();
 
 }
+register_activation_hook( __FILE__, 'activate_wp_club_records');
+
+/*
+ * The code that runs during plugin deactivation
+*/
+function deactivate_wp_club_records() {
+  require_once plugin_dir_path( __FILE__ )  . 'includes/base/deactivate.php';
+  deactivate::WPClubRecordsDeactivate();
+}
+register_deactivation_hook( __FILE__, 'deactivate_wp_club_records');
+
+/*
+ * Initialise all the core classes of the plugin
+*/
+//if ( !class_exists ( 'init::init' )) {
+  require_once plugin_dir_path( __FILE__ )  . 'includes/base/base_controller.php';
+
+  require_once plugin_dir_path( __FILE__ )  . 'includes/init.php';
+  init::register_services();  
+//}
