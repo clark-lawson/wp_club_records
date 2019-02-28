@@ -4,7 +4,7 @@
  * Trigger this file on Plugin uninsall
  * 
  * 
- * @package runabitfaster
+ * @package wp_club_records
  * 
 */
 
