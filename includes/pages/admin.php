@@ -6,7 +6,7 @@
 require_once plugin_dir_path( dirname( __FILE__, 2 ) )  . 'includes/base/base_controller.php';
 require_once plugin_dir_path( dirname( __FILE__, 2 ) )  . 'includes/api/settings_api.php';
 require_once plugin_dir_path( dirname( __FILE__, 2 ) )  . 'includes/api/callbacks/admin_callbacks.php';
-
+require_once plugin_dir_path( dirname( __FILE__, 2 ) )  . 'includes/api/callbacks/manager_callbacks.php';
 /**
 * 
 */
@@ -14,15 +14,19 @@ class Admin extends BaseController
 {
 
 	public $settings;
+
 	public $pages = array();
 	public $subpages = array();
+
 	public $callbacks;
+	public $callbacks_mngr;
 	
 
 	public function register() {
 
 		$this->settings = new SettingsApi();
 		$this->callbacks = new AdminCallbacks();
+		$this->callbacks_mngr = new ManagerCallbacks();
 		$this->setPages();
 		$this->setSubPages();
 		$this->setSettings();
@@ -38,7 +42,7 @@ class Admin extends BaseController
 				'page_title' => 'Club Records',
 				'menu_title' => 'Records',
 				'capability' => 'manage_options',
-				'menu_slug'  => 'club_records',
+				'menu_slug'  => 'wp_club_records_plugin',
 				'callback'   => array ($this->callbacks, 'adminDashboard'),
 				'icon_url'   => 'dashicons-star-empty',
 				'position'   => '110'
@@ -52,16 +56,16 @@ class Admin extends BaseController
 
 		$this->subpages = array (
 			array(
-				'parent_slug' => 'club_records',
-				'page_title' => 'Custom Post Types',
+				'parent_slug' => 'wp_club_records_plugin',
+				'page_title' =>  'Custom Post Types',
 				'menu_title' =>  'CPT',
 				'capability' =>  'manage_options',
 				'menu_slug'  =>  'club_records_cbt',
 				'callback'   =>  function() { echo '<h1>CPT Manager</h1>'; }
 			),
 			array(
-				'parent_slug' => 'club_records',
-				'page_title' => 'Custom Post Types1',
+				'parent_slug' => 'wp_club_records_plugin',
+				'page_title' =>  'Custom Post Types1',
 				'menu_title' =>  'CPT1',
 				'capability' =>  'manage_options',
 				'menu_slug'  =>  'club_records_cbt1',
@@ -74,15 +78,15 @@ class Admin extends BaseController
 
     public function setSettings() {
 
-        $args = array (
+		$args = array(
 
-            array (
-                'option_group' => 'club_records_opt_group',
-                'option_name'  => 'text_example',
-                'callback'     =>  array ( $this->callbacks, 'ClubRecordsOptGroup')
-                )
+			array (
+				'option_group' => 'wp_club_records_plugin_settings',
+				'option_name' => 'wp_club_records_plugin', /* Match slug */
+				'callback' => array ( $this->callbacks_mngr, 'checkboxSantise')
+			)
 
-            );
+		);
 
         $this->settings->setSettings( $args );
 
@@ -93,10 +97,10 @@ class Admin extends BaseController
         $args = array (
 
             array (
-                'id'           => 'club_records_admin_index',
-                'title'        => 'Settings',
-                'callback'     =>  array ( $this->callbacks, 'ClubRecordsAdminSection'),
-                'page'         =>  'club_records' 
+                'id'           => 'wp_club_records_admin_index',
+                'title'        => 'Records Manager',
+                'callback'     =>  array ( $this->callbacks_mngr, 'recordSectionManager'),
+                'page'         =>  'wp_club_records_plugin' 
                 )
 
             );
@@ -107,19 +111,25 @@ class Admin extends BaseController
 
     public function setFields() {
 
-        $args = array (
+		$args = array();
 
-            array (
-                'id'           => 'text_example',
-                'title'        => 'Text Example',
-                'callback'     =>  array ( $this->callbacks, 'ClubRecordsTextExample'),
-                'page'         =>  'club_records' ,
-				'section'      =>  'club_records_admin_index',
-				'args'         => array ( 'label_for' => 'text_example', 
-				                          'class' => 'example-class')
-                )
+		foreach ( $this->managers as $key => $value) {
+	
+			// This injects into existing array;
+			$args[] = array (
+					'id'           => $key,
+					'title'        => $value,
+					'callback'     =>  array ( $this->callbacks_mngr, 'checkboxField'),
+					'page'         =>  'wp_club_records_plugin' ,
+					'section'      =>  'wp_club_records_admin_index',
+					'args'         => array ( 
+						                     'option_name' => 'wp_club_records_plugin',
+						                     'label_for' => $key,
+											 'class' => 'ui-toggle')			
 
-            );
+			);
+	
+		};
 
         $this->settings->setFields( $args );
 
