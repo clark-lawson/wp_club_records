@@ -5,7 +5,7 @@
 
 
 ## Run the Base Controller PHP;
-//require_once $this->plugin_path . 'includes/base/base_controller.php';
+require_once plugin_dir_path( __FILE__ )  . 'base_controller.php';
 
 //use \Inc\Base\BaseController;
 /**
@@ -19,7 +19,7 @@ class WPClubRecordsEnqueue extends BaseController
 	
 	function enqueue() {
 		// enqueue all our scripts
-		wp_enqueue_style( 'mypluginstyle', $this->plugin_url . 'assets/style.css' );
-		#wp_enqueue_script( 'mypluginscript', $this->plugin_url . 'assets/script.js' );
+		wp_enqueue_style( 'mypluginstyle', $this->plugin_url . 'assets/mystyle.css' );
+		wp_enqueue_script( 'mypluginscript', $this->plugin_url . 'assets/myscripts.js' );
 	}
 }
