@@ -19,7 +19,7 @@ class AdminCallbacks extends BaseController {
     }
 
     public function ClubRecordsAdminSection( ) {
-        echo 'Check this section';
+        echo 'Please check these settings to setup the types of records you wish to manage.';
     }
 
     public function ClubRecordsTextExample( ) {
