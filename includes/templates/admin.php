@@ -1,9 +1,9 @@
 <div class="wrap">
-	<h1>Alecaddd Plugin</h1>
+	<h1>WP Club Records Plugin</h1>
 	<?php settings_errors(); ?>
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#tab-1">Manage Settings</a></li>
+		<li class="active"><a href="#tab-1">Records Manager</a></li>
 		<li><a href="#tab-2">Updates</a></li>
 		<li><a href="#tab-3">About</a></li>
 	</ul>
@@ -13,8 +13,8 @@
 
 			<form method="post" action="options.php">
 				<?php 
-					settings_fields( 'club_records_opt_group' );
-					do_settings_sections( 'club_records' );
+					settings_fields( 'wp_club_records_plugin_settings' );
+					do_settings_sections( 'wp_club_records_plugin' );
 					submit_button();
 				?>
 			</form>
