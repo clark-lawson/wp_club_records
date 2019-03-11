@@ -17,7 +17,8 @@ class SettingsApi {
     public $fields = array();
 
     public function register() {
-        if ( ! empty($this->admin_pages)) {
+
+        if ( ! empty($this->admin_pages) || ! empty($this->admin_subpages) ) {
             add_action( 'admin_menu', array ($this, 'addAdminMenu' ) );
         }
 
@@ -58,11 +59,12 @@ class SettingsApi {
     }
 
     public function addSubPages (array $pages ) {
-        $this->admin_subpages = array_merge($this->admin_subpages ,$pages);
+        $this->admin_subpages = array_merge($this->admin_subpages ,array($pages));
         return $this;
     }
 
     public function addAdminMenu () {
+
         foreach ($this->admin_pages as $page ) {
             add_menu_page( $page['page_title'], 
                            $page['menu_title'], 
@@ -75,16 +77,23 @@ class SettingsApi {
         }
 
         foreach ($this->admin_subpages as $page ) {
+
+            $parent = $page['parent_slug'];
+            $page_title = $page['page_title'];
+            $menu_title = $page['menu_title'];
+            $capability = $page['capability'];
+            $menu_slug = $page['menu_slug'];
+            $callback = $page['callback'];
+            
             add_submenu_page( 
-                           $page['parent_slug'], 
-                           $page['page_title'], 
-                           $page['menu_title'], 
-                           $page['capability'],
-                           $page['menu_slug'],
-                           $page['callback']
+                           $parent, 
+                           $page_title, 
+                           $menu_title, 
+                           $capability,
+                           $menu_slug,
+                           $callback
                            );
         }
-
 
     }
 

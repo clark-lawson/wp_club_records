@@ -28,11 +28,10 @@ class Admin extends BaseController
 		$this->callbacks = new AdminCallbacks();
 		$this->callbacks_mngr = new ManagerCallbacks();
 		$this->setPages();
-		$this->setSubPages();
 		$this->setSettings();
 		$this->setSections();
 		$this->setFields();
-		$this->settings->addPages( $this->pages)->withSubPage ( 'Dashboard' )->addSubPages( $this->subpages)->register();
+		$this->settings->addPages( $this->pages)->withSubPage ( 'Dashboard' )->register();
 	}
 
 	public function setPages() {
@@ -51,31 +50,7 @@ class Admin extends BaseController
 		);		
 
 	}
-
-	public function setSubPages() {
-
-		$this->subpages = array (
-			array(
-				'parent_slug' => 'wp_club_records_plugin',
-				'page_title' =>  'Custom Post Types',
-				'menu_title' =>  'CPT',
-				'capability' =>  'manage_options',
-				'menu_slug'  =>  'club_records_cbt',
-				'callback'   =>  function() { echo '<h1>CPT Manager</h1>'; }
-			),
-			array(
-				'parent_slug' => 'wp_club_records_plugin',
-				'page_title' =>  'Custom Post Types1',
-				'menu_title' =>  'CPT1',
-				'capability' =>  'manage_options',
-				'menu_slug'  =>  'club_records_cbt1',
-				'callback'   =>  function() { echo '<h1>CPT Manager1</h1>'; }
-			)
-		  );
-
-
-	}
-
+	
     public function setSettings() {
 
 		$args = array(
